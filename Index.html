@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMZ Collection by ANZ Aisha - Original</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{font-family:'Poppins',sans-serif;box-sizing:border-box}
+body{margin:0;background:#fdf6f1}
+header{background:#111;color:#fff;padding:16px;text-align:center;position:sticky;top:0}
+.logo{font-weight:700;font-size:19px}
+.badge{background:#ff2d2d;color:#fff;padding:2px 7px;border-radius:8px;font-size:10px;margin-left:5px}
+.container{max-width:480px;margin:auto;padding:10px}
+.card{background:#fff;border-radius:18px;padding:12px;margin:14px 0;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.card img{width:100%;border-radius:14px;height:360px;object-fit:cover}
+.price{font-weight:700;font-size:20px}
+.old{color:#999;text-decoration:line-through;font-size:13px;margin-left:6px}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer}
+.btn-wp{background:#25D366;color:#fff;margin-top:10px}
+.adminBox{max-width:500px;margin:20px auto;background:#fff;padding:20px;border-radius:14px}
+.top{background:#fff2e8;text-align:center;padding:10px;font-size:13px}
+</style>
+</head>
+<body>
+<header><span class="logo" id="title">AMZ COLLECTION</span><span class="badge">ANZ ORIGINAL</span></header>
+<div class="top" id="topMsg">Free Delivery | Cash on Delivery | 100% Original</div>
+<div class="container"><div id="app">Loading AMZ...</div></div>
+
+<script>
+const STORES = {
+  "amz": {name:"AMZ Collection by ANZ Aisha", phone:"923001234567", products:[
+    {name:"AMZ Premium Black Abaya",price:3999,old:5500,img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600"},
+    {name:"AMZ Front Open Abaya - Turkish",price:4299,old:5800,img:"https://images.unsplash.com/photo-1582533561751-ef6f6a64d5f4?w=600"},
+    {name:"AMZ Butterfly Style Abaya",price:3899,old:5200,img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600"},
+    {name:"AMZ Embroidered Abaya",price:4599,old:6200,img:"https://images.unsplash.com/photo-1631233859262-4d7b1dc9ff93?w=600"}
+  ]},
+  "default": {name:"AMZ Collection by ANZ Aisha", phone:"923001234567", products:[
+    {name:"AMZ Premium Black Abaya",price:3999,old:5500,img:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600"},
+    {name:"AMZ Front Open Abaya - Turkish",price:4299,old:5800,img:"https://images.unsplash.com/photo-1582533561751-ef6f6a64d5f4?w=600"},
+    {name:"AMZ Butterfly Style Abaya",price:3899,old:5200,img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600"}
+  ]}
+};
+
+const PASS="mohiz786";
+const params=new URLSearchParams(location.search);
+const client=params.get("client")||"amz";
+const isAdmin=params.get("admin")==="mohiz";
+let status=JSON.parse(localStorage.getItem("ANZ_STATUS")||'{"amz":"LIVE"}');
+
+function render(){
+  const app=document.getElementById("app");
+  if(isAdmin){
+    if(prompt("Admin Password likho:")!==PASS){app.innerHTML="<h2 style=text-align:center>Wrong Password</h2>";return;}
+    let html=`<div class=adminBox><h2>Moiz Bhai - Original Admin</h2><p>AMZ Control Panel</p>`;
+    Object.keys(STORES).forEach(k=>{
+      html+=`<div class=card><b>${STORES[k].name} (${k})</b><br>Status: <b>${status[k]||"LIVE"}</b><br><br><button class=btn onclick="toggle('${k}')">LIVE / PAUSE</button><br><button class=btn style="background:#eee;color:#000;margin-top:8px" onclick="copy('${k}')">Copy Link</button></div>`;
+    });
+    html+=`<p style=font-size:12px>Client Link: ?client=amz<br>Admin Link: ?admin=mohiz<br>Password: mohiz786</p></div>`;
+    app.innerHTML=html;return;
+  }
+  const store=STORES[client]||STORES["amz"];
+  document.getElementById("title").innerText=store.name.toUpperCase();
+  if((status[client]||"LIVE")==="PAUSED"){app.innerHTML=`<div style="text-align:center;padding:70px 20px"><h1>${store.name} Paused</h1><p>Order filhal band hai</p></div>`;return;}
+  let h="";store.products.forEach(p=>{
+    h+=`<div class=card><img src="${p.img}"><h3 style="margin:10px 0 4px">${p.name}</h3><div><span class=price>Rs ${p.price}</span><span class=old>Rs ${p.old}</span></div><div style="color:green;font-size:12px;margin:4px 0">✓ Cash on Delivery ✓ Free Return</div><button class="btn btn-wp" onclick="order('${p.name}','${p.price}')">WhatsApp Order - AMZ</button></div>`;
+  });
+  h+=`<div style="text-align:center;padding:20px;font-size:11px;color:#888">ANZ AISHA ORIGINAL | AMZ COLLECTION<br>Designed for Moiz - Never Sleep System</div>`;
+  app.innerHTML=h;
+}
+function toggle(k){status[k]=status[k]==="LIVE"?"PAUSED":"LIVE";localStorage.setItem("ANZ_STATUS",JSON.stringify(status));render();}
+function copy(k){let l=location.origin+location.pathname+"?client="+k;navigator.clipboard.writeText(l);alert("Copied: "+l);}
+function order(n,p){let s=STORES[client]||STORES["amz"];let t=`Salam! AMZ Collection - ANZ Aisha%0A%0AProduct: ${n}%0APrice: Rs ${p}%0A%0AName:%0AAddress:%0ASize:`;window.open(`https://wa.me/${s.phone}?text=${t}`,"_blank");}
+render();
+</script>
+</body>
+</html>
